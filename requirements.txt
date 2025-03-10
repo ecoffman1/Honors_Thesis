@@ -1,0 +1,5 @@
+pymodbus
+rdflib
+requests
+SolidClientCredentials
+python-dotenv

@@ -1,0 +1,48 @@
+import requests
+from solid_client_credentials import SolidClientCredentialsAuth, DpopTokenProvider
+
+
+class CssAccount:
+    def __init__(self, css_base_url, email, password):
+        self.css_base_url = css_base_url
+        self.email = email
+        self.password = password
+
+
+class ClientCredentials:
+    def __init__(self, client_id, client_secret):
+        self.client_id = client_id
+        self.client_secret = client_secret
+
+
+def get_client_credentials(account: CssAccount) -> ClientCredentials:
+    credentials_endpoint = f"{account.css_base_url}/idp/credentials/"
+
+    response = requests.post(
+        credentials_endpoint,
+        json={"name": "my-token", "email": account.email, "password": account.password},
+        timeout=5000,
+    )
+
+    if not response.ok:
+        raise Exception(
+            f"Could not create client credentials ({response.status_code}): {response.text}"
+        )
+
+    data = response.json()
+    return ClientCredentials(client_id=data["id"], client_secret=data["secret"])
+
+
+def upload_to_solid(oidc_issuer, client_id, client_secret, resource_url, rdf_data):
+    token_provider = DpopTokenProvider(
+        issuer_url=oidc_issuer, client_id=client_id, client_secret=client_secret
+    )
+    auth = SolidClientCredentialsAuth(token_provider)
+    headers = {"Content-Type": "text/turtle"}
+
+    response = requests.put(resource_url, headers=headers, data=rdf_data, auth=auth)
+
+    if response.status_code in [200, 201, 204]:
+        return "Data successfully saved in Solid Pod!"
+    else:
+        return f"Failed to save data ({response.status_code}): {response.text}"
