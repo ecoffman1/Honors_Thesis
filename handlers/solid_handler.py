@@ -42,7 +42,7 @@ def upload_to_solid(oidc_issuer, client_id, client_secret, resource_url, rdf_dat
 
     response = requests.put(resource_url, headers=headers, data=rdf_data, auth=auth)
 
-    if response.status_code in [200, 201, 204]:
+    if response.status_code in [200, 201, 204, 205]:
         return "Data successfully saved in Solid Pod!"
     else:
         return f"Failed to save data ({response.status_code}): {response.text}"
