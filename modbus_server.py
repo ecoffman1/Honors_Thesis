@@ -1,3 +1,6 @@
+from config import (
+    MODBUS_HOST, MODBUS_PORT, REGISTER_COUNT
+)
 from pymodbus.server import StartTcpServer
 from pymodbus.datastore import ModbusSequentialDataBlock, ModbusServerContext, ModbusSlaveContext
 import logging
@@ -21,17 +24,17 @@ class LoggingDataBlock(ModbusSequentialDataBlock):
 
 def run_server():
     store = ModbusSlaveContext(
-        hr=LoggingDataBlock("Holding Register", 0, [0] * 100),  # Read/write
-        ir=LoggingDataBlock("Input Register", 0, [0] * 100),    # Read-only
-        co=LoggingDataBlock("Coil", 0, [0] * 100),              # Read/write (binary)
-        di=LoggingDataBlock("Discrete Input", 0, [0] * 100)      # Read-only (binary)
+        hr=LoggingDataBlock("Holding Register", 0, [0] * REGISTER_COUNT),  # Read/write
+        ir=LoggingDataBlock("Input Register", 0, [0] * REGISTER_COUNT),    # Read-only
+        co=LoggingDataBlock("Coil", 0, [0] * REGISTER_COUNT),              # Read/write (binary)
+        di=LoggingDataBlock("Discrete Input", 0, [0] * REGISTER_COUNT)      # Read-only (binary)
     )
 
     context = ModbusServerContext(slaves=store, single=True)
     
     StartTcpServer(
         context=context,
-        address=("localhost", 5020)
+        address=(MODBUS_HOST, MODBUS_PORT)
     )
 
 if __name__ == "__main__":

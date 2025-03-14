@@ -8,7 +8,6 @@ load_dotenv()
 # Modbus Configuration
 MODBUS_HOST = os.getenv("MODBUS_HOST", "localhost")
 MODBUS_PORT = int(os.getenv("MODBUS_PORT", 5020))
-REGISTER_ADDRESS = int(os.getenv("REGISTER_ADDRESS", 0))
 REGISTER_COUNT = int(os.getenv("REGISTER_COUNT", 1))
 SLAVE_ID = int(os.getenv("SLAVE_ID", 1))
 
