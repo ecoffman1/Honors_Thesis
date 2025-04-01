@@ -46,3 +46,29 @@ def upload_to_solid(oidc_issuer, client_id, client_secret, resource_url, rdf_dat
         return "Data successfully saved in Solid Pod!"
     else:
         return f"Failed to save data ({response.status_code}): {response.text}"
+
+def append_to_solid(oidc_issuer, client_id, client_secret, resource_url, rdf_data):
+    token_provider = DpopTokenProvider(
+        issuer_url=oidc_issuer, client_id=client_id, client_secret=client_secret
+    )
+    auth = SolidClientCredentialsAuth(token_provider)
+
+    # First, retrieve the existing data
+    get_response = requests.get(resource_url, headers={"Accept": "text/turtle"}, auth=auth)
+
+    if get_response.status_code == 200:
+        existing_data = get_response.text
+    else:
+        existing_data = ""  # If the resource doesn't exist, create new data
+
+    # Append new RDF data
+    updated_data = existing_data + "\n" + rdf_data
+
+    # Send a PUT request with the updated RDF data
+    headers = {"Content-Type": "text/turtle"}
+    put_response = requests.put(resource_url, headers=headers, data=updated_data, auth=auth)
+
+    if put_response.status_code in [200, 201, 204, 205]:
+        return "Data successfully updated in Solid Pod!"
+    else:
+        return f"Failed to update data ({put_response.status_code}): {put_response.text}"

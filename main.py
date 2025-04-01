@@ -1,12 +1,13 @@
+import time
 from config import (
-    MODBUS_HOST, MODBUS_PORT, REGISTER_COUNT, SLAVE_ID,
+    MODBUS_HOST, MODBUS_PORT, SLAVE_ID,
     SOLID_SERVER, RESOURCE_URL, OIDC_ISSUER, CSS_EMAIL, CSS_PASSWORD
 )
 from handlers.modbus_handler import read_modbus_value, load_modbus_mappings, get_register_metadata
 from utils import add_context
-from handlers.solid_handler import CssAccount, get_client_credentials, upload_to_solid
+from handlers.solid_handler import CssAccount, get_client_credentials, append_to_solid
 
-# Function to handle reading and uploading RDF for a register
+# Reading and uploading RDF for a specified register
 def process_register(register_address):
     # Read Modbus
     try:
@@ -29,11 +30,12 @@ def process_register(register_address):
             function=register_metadata["function"],
             value=modbus_value,
             data_type=register_metadata["type"],
-            notes=register_metadata["notes"]
+            notes=register_metadata["notes"],
+            timestamp=int(time.time())
         )
         print("RDF:\n", rdf_data)
 
-        # Authenticate
+        # Authentication
         account = CssAccount(css_base_url=SOLID_SERVER, email=CSS_EMAIL, password=CSS_PASSWORD)
 
         try:
@@ -46,22 +48,19 @@ def process_register(register_address):
             return
 
         # Upload to Solid Pod
-        result = upload_to_solid(OIDC_ISSUER, CLIENT_ID, CLIENT_SECRET, RESOURCE_URL, rdf_data)
+        result = append_to_solid(OIDC_ISSUER, CLIENT_ID, CLIENT_SECRET, RESOURCE_URL, rdf_data)
         print(result)
     else:
         print(f"Register {register_address} not found in mappings.")
 
-# Main loop for handling multiple register reads
 def main():
     while True:
         try:
-            # Prompt the user for the register address
             register_address = int(input("Enter the Modbus register address to read from (or type 'exit' to quit): "))
             process_register(register_address)
         except ValueError:
             print("Exiting the program.")
             break
 
-# Run the main loop
 if __name__ == "__main__":
     main()
