@@ -1,7 +1,6 @@
 import requests
 from solid_client_credentials import SolidClientCredentialsAuth, DpopTokenProvider
 
-
 class CssAccount:
     def __init__(self, css_base_url, email, password):
         self.css_base_url = css_base_url
@@ -41,6 +40,7 @@ def upload_to_solid(oidc_issuer, client_id, client_secret, resource_url, rdf_dat
     headers = {"Content-Type": "text/turtle"}
 
     response = requests.put(resource_url, headers=headers, data=rdf_data, auth=auth)
+    
 
     if response.status_code in [200, 201, 204, 205]:
         return "Data successfully saved in Solid Pod!"
@@ -72,3 +72,16 @@ def append_to_solid(oidc_issuer, client_id, client_secret, resource_url, rdf_dat
         return "Data successfully updated in Solid Pod!"
     else:
         return f"Failed to update data ({put_response.status_code}): {put_response.text}"
+
+def get_solid_data(oidc_issuer, client_credentials: ClientCredentials, resource_url):
+    token_provider = DpopTokenProvider(
+        issuer_url=oidc_issuer, client_id=client_credentials.client_id, client_secret=client_credentials.client_secret
+    )
+    auth = SolidClientCredentialsAuth(token_provider)
+
+    response = requests.get(resource_url, auth=auth)
+    print(response.text)
+    if response.status_code == 200:
+        return response.text
+    else:
+        return f"Failed to fetch data ({response.status_code}): {response.text}"

@@ -1,0 +1,88 @@
+{
+    "registers": [
+        {
+            "register": 0,
+            "function": "TBD",
+            "range": "TBD",
+            "type": "TBD",
+            "notes": "TBD"
+        },
+        {
+            "register": 1,
+            "function": "LED Controller",
+            "range": "TBD",
+            "type": "TBD",
+            "notes": ""
+        },
+        {
+            "register": 2,
+            "function": "TBD",
+            "range": "TBD",
+            "type": "TBD",
+            "notes": ""
+        },
+        {
+            "register": 3,
+            "function": "TBD",
+            "range": "TBD",
+            "type": "TBD",
+            "notes": ""
+        },
+        {
+            "register": 4,
+            "function": "TBD",
+            "range": "TBD",
+            "type": "TBD",
+            "notes": ""
+        },
+        {
+            "register": 5,
+            "function": "TBD",
+            "range": "TBD",
+            "type": "TBD",
+            "notes": ""
+        },
+        {
+            "register": 6,
+            "function": "TBD",
+            "range": "TBD",
+            "type": "TBD",
+            "notes": ""
+        },
+        {
+            "register": 7,
+            "function": "TBD",
+            "range": "TBD",
+            "type": "TBD",
+            "notes": ""
+        },
+        {
+            "register": 8,
+            "function": "TBD",
+            "range": "TBD",
+            "type": "TBD",
+            "notes": ""
+        },
+        {
+            "register": 9,
+            "function": "Potentiometer1",
+            "range": "0-3360",
+            "type": "Uint16",
+            "notes": ""
+        },
+        {
+            "register": 10,
+            "function": "TBD",
+            "range": "TBD",
+            "type": "TBD",
+            "notes": ""
+        },
+        {
+            "register": 17,
+            "function": "Potentiometer2",
+            "range": "0-3360",
+            "type": "Uint16",
+            "notes": ""
+        }
+    ]
+}

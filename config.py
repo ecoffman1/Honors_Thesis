@@ -14,6 +14,7 @@ SLAVE_ID = int(os.getenv("SLAVE_ID", 1))
 # Solid Pod Configuration
 SOLID_SERVER = os.getenv("SOLID_SERVER")
 RESOURCE_URL = os.getenv("RESOURCE_URL")
+COMMANDS_URL = os.getenv("COMMANDS_URL")
 OIDC_ISSUER = os.getenv("OIDC_ISSUER")
 
 # CSS Account Credentials

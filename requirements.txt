@@ -3,3 +3,5 @@ rdflib==7.1.3
 requests==2.31.0
 SolidClientCredentials==1.0.3
 python-dotenv==1.0.1
+pyserial
+websockets
